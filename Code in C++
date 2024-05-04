@@ -1,0 +1,99 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node{
+    int value;
+    struct Node* next;
+};
+
+void insertBeginning(struct Node** head, int value){
+    struct Node* newNode = new Node;
+    newNode->value = value;
+    newNode->next = (*head);  // *head = address of first node;  newNode will contain the address of its next node(old head)
+    (*head) = newNode;     // new head is updated to the newly added node
+}
+
+void printLinkedList(struct Node* head){
+    if(head == NULL){
+        cout << "Empty List" << endl;
+        return;
+    }
+    struct Node* current = head;  // current holds the pointer to the first node
+   
+    while(current != NULL){ // till the last elemt of list, As the last node contains a NULL pointer indicating the end of list
+        cout << current->value << " ";
+        current = current->next;  //after printing the current node's value , updating the cuurent to its next node
+    }
+}
+
+void insertAfter(struct Node* prev, int newNodeValue){
+    if(prev == NULL){
+        cout << "Previous Node can't be NULL" << endl;
+        return;
+    }
+    struct Node* newNode = new Node;
+    struct Node* hold = prev->next;
+    newNode->value = newNodeValue;
+    prev->next = newNode;
+    newNode->next = hold;
+}
+
+void deleteFirstNode(struct Node** head){
+    if(head == NULL){
+        cout << "List is Empty" << endl;
+        return;
+    }
+    
+    struct Node* tmp = *head;
+    (*head) = (*head)->next;
+    delete tmp;
+   
+}
+
+void deleteLastNode(struct Node* head){
+    if(head == NULL){
+        cout << "Empty List" << endl;
+        return;
+    }
+    
+    if(head->next ==  NULL){
+        delete head;
+        head = NULL;
+    }
+    struct Node* secondLastNode = head;
+    struct Node* lastNode = head->next;
+    
+    while(lastNode->next != NULL){
+        secondLastNode = lastNode;
+        lastNode = lastNode->next;
+    }
+    
+    secondLastNode->next = NULL;  //this is important to indicate the ending of List
+    delete lastNode;
+    
+}
+
+void deleteAfter(struct Node* prevNode){
+    if(prevNode == NULL or prevNode->next == NULL){
+        cout << "Choose any existing valid Node from the List" << endl;
+        return;
+    }
+    
+    struct Node* nodeToBeDeleted = prevNode->next;
+    prevNode->next = nodeToBeDeleted->next;
+    delete nodeToBeDeleted;
+}
+
+int main(){
+    struct Node* head = NULL;
+    insertBeginning(&head, 125);
+    insertBeginning(&head, 10);
+    insertAfter(head, 15);   // (prevNode, newValue)
+    //deleteFirstNode(&head);
+    deleteLastNode(head);
+    deleteAfter(head);
+    insertBeginning(&head, -9);
+    printLinkedList(head);
+
+    return 0;
+}
